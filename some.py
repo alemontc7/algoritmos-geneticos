@@ -1,11 +1,44 @@
 import random 
 
+#representamos a bolivia como un espacio de dimensiones
+#donde cada incide representa a un departamento y su valor representa una asginacion a ese departamento
+# [0,1,2,3,4,5,6,7,8,9]
+# La paz, Oruro, Potosi, Cochabamba, Tarija, Chuquisaca, Pando, Beni, Santa Cruz
+# El dominio estará representado por colores R,V,A (Rojo verde y azul)
+# ejemplo de asignación de valores de dominio a variables
+# [R,V,A,V,R,V,V,A,A]
+
+#definimos nuestras adyacencias
+
+bolivia = {
+    'Pando': ['La Paz', 'Beni'],
+    'Beni': ['Pando', 'Santa Cruz', 'Cochabamba', 'La Paz'],
+    'Santa Cruz': ['Chuquisaca', 'Cochabamba', 'Beni'],
+    'Tarija': ['Chuquisaca', 'Potosi'],
+    'Chuquisaca': ['Tarija', 'Cochabamba', 'Potosi', 'Santa Cruz'],
+    'Cochabamba': ['La Paz', 'Oruro', 'Potosi', 'Chuquisaca', 'Santa Cruz', 'Beni'], 
+    'La Paz': ['Pando' , 'Beni', 'Oruro', 'Santa Cruz'],
+    'Oruro' : ['Potosi', 'Cochabamba', 'La Paz', ],
+    'Potosi': ['Oruro', 'Cochabamba', 'Potosi', 'Tarija']
+}
+
+departamentos = ['Pando', 'Beni', 'La Paz', 'Tarija', 'Chuquisaca', 'Cochabamba', 'La Paz', 'Oruro', 'Potosi']
+
+indices = {'Pando': 0, 'Beni': 1, 'Santa Cruz': 2, 'Tarija': 3, 'Chuquisaca': 4
+           , 'Cochabamba': 5, 'La Paz': 6, 'Oruro': 7, 'Potosi': 8,}
+
+dominio = ['R', 'V', 'A']
+
 def get_aptitud(individuo):
     conflicto = 0
+    #verificamos los conflictos entre departamentos
     for i in range(len(individuo)):
-        for j in range(i +  1, len(individuo)):
-            if abs( i - j ) == abs(individuo[i] - individuo[j]):
-                conflicto+=1
+        departamento = departamentos[i]
+        color_departamento = individuo[i]
+        for vecino in bolivia[departamento]:
+            color_vecino = individuo[indices[vecino]]
+            if color_departamento == color_vecino:
+                conflicto += 1
     return conflicto
 
 def crossover(padre, madre):
@@ -21,17 +54,21 @@ def seleccion(poblacion, res_aptitud, tam_torneo=2):
             mejor_indice = i
     return poblacion[mejor_indice]
 
+#ajustamos la funcion de mutacion
 def mutacion(individuo, tasa_mutacion):
     for indiv in range(len(individuo)):
         if random.random() < tasa_mutacion:
-            individuo[indiv] = random.randint(0, len(individuo) - 1)
+            #escogemos sobre el dominio actual
+            individuo[indiv] = random.choice(dominio)
     return individuo
 
 
 def programa(n, tam_poblacion, generaciones, tasa_mutacion):
     poblacion = []
     for x in range(tam_poblacion):
-        cromosoma = [random.randint(0, n-1) for y in range(n)]
+        # generamos poblacion inicial en funcion de los valores de dominio
+        # y del tamaño de nuestro espacio de variables
+        cromosoma = [random.choice(dominio) for y in range(len(departamentos))]
         poblacion.append(cromosoma)
     ## lo de arriba solo genera poblacion inicial
     ## ahora generamos nueva poblacion
@@ -65,7 +102,7 @@ def programa(n, tam_poblacion, generaciones, tasa_mutacion):
     return mejor
 
 if __name__ == "__main__":
-    n = 8
+    n = 9
     tam_poblacion = 100
     generaciones = 1000
     tasa_mutacion = 0.01

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mejora de Imágenes con Algoritmo Genético</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Mejora de Imágenes con Algoritmo Genético</h1>
+    <form method="post" enctype="multipart/form-data">
+        <label for="file">Subir imagen:</label>
+        <input type="file" name="file" id="file" accept="image/*" required><br><br>
+
+        <!-- Parámetros -->
+
+        <h2>Configuración de Parámetros</h2>
+
+        
+        <label for="metodo_seleccion">Estilo</label>
+        <select name="style" id="style">
+            <option value="noni">El poni</option>
+            <option value="sebas">Bello</option>
+        </select><br><br>
+
+        <label for="tamano_poblacion">Tamaño de Población:</label>
+        <input type="number" name="tamano_poblacion" id="tamano_poblacion" value="100"><br><br>
+
+        <label for="generaciones">Generaciones:</label>
+        <input type="number" name="generaciones" id="generaciones" value="500"><br><br>
+
+        <label for="tour_size">Tamaño del torneo:</label>
+        <input type="number" name="tour_size" id="tour_size" value="4"><br><br>
+
+        <label for="tasa_mutacion">Tasa de Mutación:</label>
+        <input type="number" step="0.01" name="tasa_mutacion" id="tasa_mutacion" value="0.01"><br><br>
+
+        <label for="num_padres">Número de Padres:</label>
+        <input type="number" name="num_padres" id="num_padres" value="2"><br><br>
+
+        <label for="metodo_seleccion">Método de Selección:</label>
+        <select name="metodo_seleccion" id="metodo_seleccion">
+            <option value="elite">Elite</option>
+            <option value="ruleta">Ruleta</option>
+            <option value="torneo">Torneo</option>
+            <!-- Agrega más opciones si es necesario -->
+        </select><br><br>
+
+        <label for="metodo_cruce">Método de Cruce:</label>
+        <select name="metodo_cruce" id="metodo_cruce">
+            <option value="uniforme">Uniforme</option>
+            <option value="un_punto">Un Punto</option>
+            <option value="dos_puntos">Dos Puntos</option>
+            <!-- Agrega más opciones si es necesario -->
+        </select><br><br>
+
+        <label for="metodo_mutacion">Método de Mutación:</label>
+        <select name="metodo_mutacion" id="metodo_mutacion">
+            <option value="simple">Simple</option>
+            <option value="swap">Swap</option>
+            <option value="crecimiento">Crecimiento</option>
+            <!-- Agrega más opciones si es necesario -->
+        </select><br><br>
+
+        <input type="submit" value="Procesar Imagen">
+    </form>
+
+    {% if original_image and processed_image %}
+    <h2>Resultados</h2>
+    <div class="images">
+        <div>
+            <h3>Imagen Original</h3>
+            <img src="{{ url_for('uploaded_file', filename=original_image) }}" alt="Imagen Original">
+        </div>
+        <div>
+            <h3>Imagen Mejorada</h3>
+            <img src="{{ url_for('uploaded_file', filename=processed_image) }}" alt="Imagen Mejorada">
+        </div>
+    </div>
+    {% endif %}
+
+</body>
+</html>
