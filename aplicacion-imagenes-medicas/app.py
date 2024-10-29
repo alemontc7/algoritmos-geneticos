@@ -47,9 +47,12 @@ def index():
             metodo_seleccion = request.form.get('metodo_seleccion', 'elite')
             metodo_cruce = request.form.get('metodo_cruce', 'uniforme')
             metodo_mutacion = request.form.get('metodo_mutacion', 'simple')
-
+            kernel=(
+                int(request.form.get('filas_kernel', '3')),
+                int(request.form.get('cols_kernel', '3'))   
+            )
             # Procesar la imagen
-            imagen_mejorada = procesar_imagen(filepath, tamano_poblacion, generaciones, tasa_mutacion, num_padres, tamanio_torneo, estilo, metodo_seleccion, metodo_cruce, metodo_mutacion)
+            imagen_mejorada = procesar_imagen(filepath, tamano_poblacion, generaciones, tasa_mutacion, num_padres, tamanio_torneo, estilo, metodo_seleccion, metodo_cruce, metodo_mutacion,kernel)
 
             # Guardar la imagen mejorada
             output_filename = 'mejorada_' + filename
@@ -57,10 +60,11 @@ def index():
             imagen_mejorada.save(output_path)
             print(filename)
             return render_template('index.html', original_image=filename, processed_image=output_filename)
+    print("gg")
     return render_template('index.html')
 
 
-def procesar_imagen(filepath, TAMANO_POBLACION, GENERACIONES, TASA_MUTACION, NUM_PADRES, TOUR_SIZE, STYLE, selection_method, crossover_method, mutation_method):
+def procesar_imagen(filepath, TAMANO_POBLACION, GENERACIONES, TASA_MUTACION, NUM_PADRES, TOUR_SIZE, STYLE, selection_method, crossover_method, mutation_method,kernel):
     radiografia = Image.open(filepath).convert("L")
     WIDTH, HEIGHT = radiografia.size
     radiografia = radiografia.resize((256, 256))
@@ -68,10 +72,7 @@ def procesar_imagen(filepath, TAMANO_POBLACION, GENERACIONES, TASA_MUTACION, NUM
 
     # Función para crear un filtro inicial
     def crear_individuo():
-        if STYLE == 'sebas':
-            return np.random.uniform(0, 1, (10, 10))
-        elif STYLE == 'noni':
-            return np.random.uniform(0, 1, (3, 3))
+        return np.random.uniform(0, 1, kernel)
 
     # Función para aplicar un filtro a una imagen
     def aplicar_filtro(imagen, filtro):
