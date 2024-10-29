@@ -35,6 +35,7 @@ def index():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print(f"THIS IS MY PATH {filepath}")
             file.save(filepath)
 
             # Obtener parámetros del formulario
