@@ -14,6 +14,9 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+# if not os.path.exists(app.config['UPLOAD_FOLDER']):
+#     os.makedirs(app.config['UPLOAD_FOLDER'])
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -36,21 +39,21 @@ def index():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             print(f"THIS IS MY PATH {filepath}")
-            file.save(filepath)
+            file.save(f"{filepath}")
 
             # Obtener parámetros del formulario
-            estilo = request.form.get('style', 'noni')
+            estilo = request.form.get('style', 'sebas')
             tamanio_torneo = int(request.form.get('tour_size', 4))
             tamano_poblacion = int(request.form.get('tamano_poblacion', 100))
-            generaciones = int(request.form.get('generaciones', 500))
+            generaciones = int(request.form.get('generaciones', 200))
             tasa_mutacion = float(request.form.get('tasa_mutacion', 0.01))
             num_padres = int(request.form.get('num_padres', 2))
             metodo_seleccion = request.form.get('metodo_seleccion', 'elite')
             metodo_cruce = request.form.get('metodo_cruce', 'uniforme')
             metodo_mutacion = request.form.get('metodo_mutacion', 'simple')
             kernel=(
-                int(request.form.get('filas_kernel', '3')),
-                int(request.form.get('cols_kernel', '3'))   
+                int(request.form.get('filas_kernel', '7')),
+                int(request.form.get('cols_kernel', '7'))   
             )
             # Procesar la imagen
             imagen_mejorada = procesar_imagen(filepath, tamano_poblacion, generaciones, tasa_mutacion, num_padres, tamanio_torneo, estilo, metodo_seleccion, metodo_cruce, metodo_mutacion,kernel)
@@ -61,7 +64,6 @@ def index():
             imagen_mejorada.save(output_path)
             print(filename)
             return render_template('index.html', original_image=filename, processed_image=output_filename)
-    print("gg")
     return render_template('index.html')
 
 

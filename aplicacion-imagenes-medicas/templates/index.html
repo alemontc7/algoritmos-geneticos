@@ -7,26 +7,25 @@
 </head>
 <body>
     <h1>Mejora de Imágenes con Algoritmo Genético</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form id="upload-form" method="post" enctype="multipart/form-data">
         <label for="file">Subir imagen:</label>
         <input type="file" name="file" id="file" accept="image/*" required><br><br>
 
-        <!-- Parámetros -->
 
         <h2>Configuración de Parámetros</h2>
 
         
         <label for="metodo_seleccion">Estilo</label>
         <select name="style" id="style">
-            <option value="noni">El poni</option>
             <option value="sebas">Bello</option>
+            <option value="noni">El poni</option>
         </select><br><br>
 
         <label for="tamano_poblacion">Tamaño de Población:</label>
         <input type="number" name="tamano_poblacion" id="tamano_poblacion" value="100"><br><br>
 
         <label for="generaciones">Generaciones:</label>
-        <input type="number" name="generaciones" id="generaciones" value="500"><br><br>
+        <input type="number" name="generaciones" id="generaciones" value="200"><br><br>
 
         <label for="tour_size">Tamaño del torneo:</label>
         <input type="number" name="tour_size" id="tour_size" value="4"><br><br>
@@ -38,29 +37,27 @@
         <input type="number" name="num_padres" id="num_padres" value="2"><br><br>
 
         <label for="filas_kernel">Filas del kernel para la convolucion:</label>
-        <input type="number" name="filas_kernel" id="filas_kernel" value="3"><br><br>
+        <input type="number" name="filas_kernel" id="filas_kernel" value="7"><br><br>
 
         <label for="cols_kernel">Columnas del kernel para la convolucion:</label>
-        <input type="number" name="cols_kernel" id="cols_kernel" value="3"><br><br>
+        <input type="number" name="cols_kernel" id="cols_kernel" value="7"><br><br>
 
         <label for="metodo_seleccion">Método de Selección:</label>
         <select name="metodo_seleccion" id="metodo_seleccion">
             <option value="elite">Elite</option>
+            <option value="torneo">Torneo</option>
             <option value="ruleta">Ruleta</option>
             <option value="aptitud">Aptitud</option>
             <option value="muestreo_estocastico">Muestreo estocástico</option>
-            <option value="torneo">Torneo</option>
             <option value="rango">Rango</option>
-            <!-- Agrega más opciones si es necesario -->
         </select><br><br>
 
         <label for="metodo_cruce">Método de Cruce:</label>
         <select name="metodo_cruce" id="metodo_cruce">
             <option value="uniforme">Uniforme</option>
-            <option value="un_punto">Un Punto</option>
             <option value="dos_puntos">Dos Puntos</option>
+            <option value="un_punto">Un Punto</option>
             <option value="punto_medio">Dos Puntos</option>
-            <!-- Agrega más opciones si es necesario -->
         </select><br><br>
 
         <label for="metodo_mutacion">Método de Mutación:</label>
@@ -69,11 +66,18 @@
             <option value="swap">Swap</option>
             <option value="crecimiento">Crecimiento</option>
             <option value="reduccion">Crecimiento</option>
-            <!-- Agrega más opciones si es necesario -->
         </select><br><br>
 
         <input type="submit" value="Procesar Imagen">
     </form>
+<div id="container">
+<div id="loading-container" style="display: none;">
+    <div id="spinner">
+
+    </div>
+    
+</div>
+</div>
 
     {% if original_image and processed_image %}
     <h2>Resultados</h2>
@@ -88,6 +92,12 @@
         </div>
     </div>
     {% endif %}
-
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function() {
+            document.getElementById('loading-container').style.display = 'block';
+        });
+    </script>
+    
 </body>
 </html>
